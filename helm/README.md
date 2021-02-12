@@ -14,3 +14,8 @@ helm upgrade --install vault hashicorp/vault -n vault -f values-vault.yaml
 
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm upgrade --install etcd-vault bitnami/etcd -n vault -f values-etcd.yaml
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+kubectl create ns ingress
+helm install ingress-nginx ingress-nginx/ingress-nginx -n ingress
