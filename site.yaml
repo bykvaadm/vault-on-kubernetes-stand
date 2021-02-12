@@ -1,0 +1,31 @@
+- hosts: kubernetes
+  become: yes
+  pre_tasks:
+  roles:
+  - docker
+  - kubernetes_repo
+  - kubernetes_base
+
+- hosts: kubernetes-master
+  become: yes
+  roles:
+  - kubernetes_master
+  - calico
+
+- hosts: kubernetes-master
+  tasks:
+  - name: Create token
+    shell: kubeadm token create --print-join-command 2>/dev/null
+    #kubeadm token create --config /etc/kubernetes/kubeadm-config.yml --print-join-command
+    become: yes
+    register: token_create
+    changed_when: no
+    run_once: yes
+
+  - name: Join kubernetes
+    become: yes
+    delegate_to: "{{ item }}"
+    shell: "{{ token_create.stdout | replace('10.0.2.15', '192.168.77.10') }}"
+    args:
+      creates: /etc/kubernetes/kubelet.conf
+    loop: "{{ groups['kubernetes-node'] }}"

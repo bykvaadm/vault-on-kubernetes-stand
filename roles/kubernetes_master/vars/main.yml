@@ -1,0 +1,3 @@
+config_dir: /etc/kubernetes
+config_file: "{{ config_dir }}/kubeadm-config.yml"
+admin_conf: "{{ config_dir }}/admin.conf"

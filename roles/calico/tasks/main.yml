@@ -1,0 +1,44 @@
+- name: Apply definitions
+  k8s:
+    definition: "{{ lookup('template', item + '.yaml') | from_yaml }}"
+  with_items:
+  - clusterrole-calico-kube-controllers
+  - clusterrole-calico-node
+  - clusterrolebinding-calico-kube-controllers
+  - clusterrolebinding-calico-node
+  - configmap
+  - crd-bgpconfigurations
+  - crd-bgppeers
+  - crd-blockaffinities
+  - crd-clusterinformations
+  - crd-felixconfigurations
+  - crd-globalnetworkpolicies
+  - crd-globalnetworksets
+  - crd-hostendpoints
+  - crd-ipamblocks
+  - crd-ipamconfigs
+  - crd-ipamhandles
+  - crd-ippools
+  - crd-networkpolicies
+  - crd-networksets
+  - daemonset
+  - deployment
+  - serviceaccount-calico-kube-controllers
+  - serviceaccount-calico-node
+#  - serviceaccount
+#  - clusterrole
+#  - clusterrolebinding
+#  - configmap
+#  - service-typha
+#  - deployment-typha
+#  - daemonset
+#  - crd-felixconfigurations
+#  - crd-bgppeers
+#  - crd-bgpconfigurations
+#  - crd-ippools
+#  - crd-hostendpoints
+#  - crd-clusterinformations
+#  - crd-globalnetworkpolicies
+#  - crd-globalnetworksets
+#  - crd-networkpolicies
+  register: calico_definition

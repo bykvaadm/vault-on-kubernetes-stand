@@ -1,0 +1,12 @@
+#- name: Preconfigure kubelet
+#  copy:
+#    dest: /etc/default/kubelet
+#    content: |
+#      KUBELET_EXTRA_ARGS="--node-ip={{ kubernetes_base_internal_ip }}"
+
+- name: Ensure Kubernetes packages
+  package: name={{ item }}
+  with_items:
+  - "kubelet={{ kubernetes_repo_version }}"
+  - "kubeadm={{ kubernetes_repo_version }}"
+  - "kubectl={{ kubernetes_repo_version }}"

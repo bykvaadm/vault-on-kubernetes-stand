@@ -1,0 +1,20 @@
+- name: Ensure apt-transport-https
+  apt: name=apt-transport-https
+
+- name: Ensure APT key
+  apt_key: url=https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+- name: Ensure APT repository
+  apt_repository: repo="deb http://apt.kubernetes.io/ kubernetes-xenial main"
+
+- name: Ensure APT preferences
+  copy:
+    content: |
+      Package: kubelet kubeadm kubectl
+      Pin: version {{ kubernetes_repo_version }}
+      Pin-Priority: 600
+
+      Package: kubernetes-cni
+      Pin: version {{ kubernetes_cni_version }}
+      Pin-Priority: 600
+    dest: /etc/apt/preferences.d/kube-binaries.pref
