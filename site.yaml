@@ -1,6 +1,5 @@
 - hosts: kubernetes
   become: yes
-  pre_tasks:
   roles:
   - docker
   - kubernetes_repo

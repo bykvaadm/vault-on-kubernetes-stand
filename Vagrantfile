@@ -4,7 +4,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
-    vb.memory = "3096"
+    vb.memory = "2048"
     vb.cpus = 2
     vb.linked_clone = true
   end
@@ -30,7 +30,6 @@ Vagrant.configure("2") do |config|
             "kubernetes" => [ "master", "node-[1:#{N}]" ],
             "kubernetes-master" => [ "master" ],
             "kubernetes-node" => [ "node-[1:#{N}]" ]
-            #"victoria_cluster:vars" => { "if_name" => "eth1", "vminsert_replication_factor" => 2 },
           }
           ansible.raw_arguments = [ "-D" ]
         end
