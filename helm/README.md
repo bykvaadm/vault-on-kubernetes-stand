@@ -6,8 +6,10 @@ tar zxvf helm-v3.5.2-linux-amd64.tar.gz
 mv linux-amd64/helm  /usr/local/bin/
 
 kubectl create ns vault
+
+cd /vagrant/helm/
 helm repo add hashicorp https://helm.releases.hashicorp.com
-helm upgrade --install vault hashicorp/vault -n vault -f values.yaml 
+helm upgrade --install vault hashicorp/vault -n vault -f values-vault.yaml
 
 
 helm repo add bitnami https://charts.bitnami.com/bitnami
