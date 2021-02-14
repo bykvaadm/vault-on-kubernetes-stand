@@ -1,0 +1,68 @@
+server:
+  ingress:
+    enabled: true
+    labels: {}
+    annotations: |
+     kubernetes.io/ingress.class: nginx
+    hosts:
+      - host: vault.local
+        paths: []
+    tls: []
+  standalone:
+    enabled: false
+    config: |
+      ui = true
+      listener "tcp" {
+        tls_disable = 1
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+      }
+      storage "etcd" {
+        address  = "http://etcd-vault:2379"
+        etcd_api = "v3"
+      }
+  ha:
+    enabled: true
+    replicas: 3
+    apiAddr: null
+    raft:
+      enabled: false
+      setNodeId: false
+      config: |
+        ui = true
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+        }
+        storage "etcd" {
+          address    = "http://etcd-vault:2379"
+          etcd_api   = "v3"
+          username   = "root"
+          password   = "azazaololo123"
+          ha_enabled = "true"
+        }
+        service_registration "kubernetes" {}
+    config: |
+      ui = true
+      listener "tcp" {
+        tls_disable = 1
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+      }
+      storage "etcd" {
+        address    = "http://etcd-vault:2379"
+        etcd_api   = "v3"
+        username   = "root"
+        password   = "azazaololo123"
+        ha_enabled = "true"
+      }
+      service_registration "kubernetes" {}
+ui:
+  enabled: true
+  publishNotReadyAddresses: true
+  activeVaultPodOnly: false
+  serviceType: "ClusterIP"
+  serviceNodePort: null
+  externalPort: 8200
+  annotations: {}

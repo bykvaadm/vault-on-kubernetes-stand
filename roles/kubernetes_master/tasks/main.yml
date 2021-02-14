@@ -1,16 +1,15 @@
-- name: Configure kubeadm
-  template: src=config.yml.j2 dest={{ config_file }}
-  register: kubeadm_config_file
+- name: "stat of {{ admin_conf }}"
+  stat:
+    path: "{{ admin_conf }}"
+    get_attributes: no
+  register: admin_conf
 
 - name: Initialize master
-  command: kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=192.168.77.10 --apiserver-cert-extra-sans=10.0.2.15
-  #kubeadm init --config={{ config_file }}
+  command: "kubeadm init --pod-network-cidr={{ kubernetes_master_pod_subnet }} --apiserver-advertise-address={{ kubernetes_base_ip }} --apiserver-cert-extra-sans={{ ansible_default_ipv4.address }}"
   args:
     creates: "{{ admin_conf }}"
   register: kubeadm
-  when: kubeadm_config_file.changed
-
-- debug: var=kubeadm
+  when: not admin_conf.stat.exists
 
 - block:
   - name: Delete kubeconfig of admin
@@ -25,36 +24,17 @@
     name:
       - python3-pip
       - python3-setuptools
-      - python-pip
-      - python-setuptools
-
-- name: remove dist pyyaml
-  shell: rm -rf /usr/lib/python3/dist-packages/yaml || true; rm -rf /usr/lib/python3/dist-packages/PyYAML-* || true
-  changed_when: false
-  ignore_errors: yes
 
 - name: upgrade pip3
   pip:
-    name: pip < 21.0
+    name: pip
     executable: pip3
-    extra_args: --upgrade
-
-- name: upgrade pip2
-  pip:
-    name: pip < 21.0
     extra_args: --upgrade
 
 - name: Ensure python3 modules
   ignore_errors: yes
   pip:
     executable: pip3
-    name:
-      - openshift
-
-- name: Ensure python2 modules
-  ignore_errors: yes
-  pip:
-    executable: pip2
     name:
       - openshift
 

@@ -1,0 +1,53 @@
+- name: install helm
+  unarchive:
+    src: https://get.helm.sh/helm-v3.5.2-linux-amd64.tar.gz
+    dest: /usr/local/bin
+    remote_src: yes
+    extra_opts:
+    - --strip-components=1
+    - linux-amd64/helm
+    creates: /usr/local/bin/helm
+
+- name: add hashicorp helm repo
+  community.kubernetes.helm_repository:
+    name: hashicorp
+    repo_url: "https://helm.releases.hashicorp.com"
+
+- name: add bitnami helm repo
+  community.kubernetes.helm_repository:
+    name: bitnami
+    repo_url: "https://charts.bitnami.com/bitnami"
+
+- name: add nginx-ingress helm repo
+  community.kubernetes.helm_repository:
+    name: nginx-stable
+    repo_url: "https://helm.nginx.com/stable"
+
+- name: Create a k8s namespace
+  community.kubernetes.k8s:
+    name: vault
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Deploy etcd-vault
+  community.kubernetes.helm:
+    name: etcd-vault
+    release_namespace: vault
+    chart_ref: bitnami/etcd
+    values: "{{ lookup('template', 'values-etcd.yaml') | from_yaml }}"
+
+- name: Deploy ingress
+  community.kubernetes.helm:
+    name: nginx-ingress
+    release_namespace: ingress
+    create_namespace: yes
+    chart_ref: nginx-stable/nginx-ingress
+    values: "{{ lookup('template', 'values-ingress.yaml') | from_yaml }}"
+
+- name: Deploy vault
+  community.kubernetes.helm:
+    name: vault
+    release_namespace: vault
+    chart_ref: hashicorp/vault
+    values: "{{ lookup('template', 'values-vault.yaml') | from_yaml }}"

@@ -1,2 +1,0 @@
-kubernetes_base_internal_ip: "{{ ansible_default_ipv4.address }}"
-kubernetes_repo_version: 1.19.7-*

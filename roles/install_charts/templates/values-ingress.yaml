@@ -1,0 +1,6 @@
+controller:
+  ingressClass: nginx
+  service:
+    externalIPs:
+      - 192.168.77.10
+    type: ClusterIP

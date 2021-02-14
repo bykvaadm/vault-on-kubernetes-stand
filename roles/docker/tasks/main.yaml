@@ -28,3 +28,10 @@
       - containerd.io
     update_cache: yes
     cache_valid_time: 3600
+
+- name: ensure docker config
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+  notify: restart docker daemon
+
