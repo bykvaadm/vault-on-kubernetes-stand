@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
     n.vm.box = "ubuntu/bionic64"
     n.vm.hostname = "master"
     n.vm.network "private_network", ip: "192.168.77.10"
-    n.vm.network "forwarded_port", guest: 80, host: 8080, guest_ip: "192.168.77.10"
+    n.vm.network "forwarded_port", guest: 80, host: 80, guest_ip: "192.168.77.10"
   end
 
   N = 3

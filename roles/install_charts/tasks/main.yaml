@@ -23,9 +23,21 @@
     name: nginx-stable
     repo_url: "https://helm.nginx.com/stable"
 
+- name: add nginx-ingress helm repo
+  community.kubernetes.helm_repository:
+    name: jenkins
+    repo_url: "https://charts.jenkins.io"
+
 - name: Create a k8s namespace
   community.kubernetes.k8s:
     name: vault
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Create a k8s namespace
+  community.kubernetes.k8s:
+    name: jenkins
     api_version: v1
     kind: Namespace
     state: present
@@ -51,3 +63,11 @@
     release_namespace: vault
     chart_ref: hashicorp/vault
     values: "{{ lookup('template', 'values-vault.yaml') | from_yaml }}"
+
+- name: Deploy jenkins
+  community.kubernetes.helm:
+    name: jenkins
+    release_namespace: jenkins
+    chart_ref: jenkins/jenkins
+    values: "{{ lookup('template', 'values-jenkins.yaml') | from_yaml }}"
+
