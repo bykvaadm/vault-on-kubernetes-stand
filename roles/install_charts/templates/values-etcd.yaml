@@ -4,5 +4,4 @@ auth:
     rootPassword: azazaololo123
 persistence:
   enabled: false
-statefulset:
-  replicaCount: 3
+replicaCount: 3
