@@ -16,15 +16,15 @@ Vagrant.configure("2") do |config|
     end
     n.vm.box = "ubuntu/bionic64"
     n.vm.hostname = "master"
-    n.vm.network "private_network", ip: "192.168.77.10"
-    n.vm.network "forwarded_port", guest: 80, host: 80, guest_ip: "192.168.77.10"
+    n.vm.network "private_network", ip: "192.168.56.10"
+    n.vm.network "forwarded_port", guest: 80, host: 80, guest_ip: "192.168.56.10"
   end
 
   N = 3
   (1..N).each do |machine_id|
     config.vm.define "node-#{machine_id}" do |n|
       n.vm.hostname = "node-#{machine_id}"
-      n.vm.network "private_network", ip: "192.168.77.#{20+machine_id}"
+      n.vm.network "private_network", ip: "192.168.56.#{20+machine_id}"
       n.vm.box = "ubuntu/bionic64"
 
       if machine_id == N
