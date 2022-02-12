@@ -1,5 +1,5 @@
 - name: Apply definitions
-  k8s:
+  kubernetes.core.k8:
     definition: "{{ lookup('template', item + '.yaml') | from_yaml }}"
   with_items:
   - clusterrole-calico-kube-controllers
