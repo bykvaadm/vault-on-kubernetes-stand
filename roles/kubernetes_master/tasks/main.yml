@@ -36,7 +36,7 @@
   pip:
     executable: pip3
     name:
-      - openshift
+      - kubernetes
 
 - name: ensure .kube directory
   file:
